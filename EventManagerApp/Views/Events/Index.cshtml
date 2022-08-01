@@ -1,0 +1,30 @@
+﻿@model IEnumerable<EventManagerApp.Models.Event>
+@{
+    ViewBag.Title = "Index";
+}
+
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Event Name
+            </th>
+            <th>
+                Tickets Left
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td width="50%">
+                    @Html.ActionLink(obj.Name, "Details", "Events", new { id = obj.Id }, null)
+                </td>
+                <td width="30%">
+                    @obj.TicketPool
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
