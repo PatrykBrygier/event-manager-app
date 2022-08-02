@@ -1,0 +1,23 @@
+﻿@model EventManagerApp.Models.Ticket
+@{
+    ViewBag.Title = "Buy";
+}
+
+<h2>Buy</h2>
+@using (Html.BeginForm("Save", "Tickets"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.FirstName)
+        @Html.TextBoxFor(m => m.Customer.FirstName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.LastName)
+        @Html.TextBoxFor(m => m.Customer.LastName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.Email)
+        @Html.TextBoxFor(m => m.Customer.Email, "{0:dd-MM-yyyy}", new { @class = "form-control" })
+    </div>
+    @Html.HiddenFor(e => e.Event.Id)
+    <button type="submit" class="btn btn-primary">Buy</button>
+}
