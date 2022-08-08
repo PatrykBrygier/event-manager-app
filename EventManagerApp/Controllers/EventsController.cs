@@ -54,6 +54,7 @@ namespace EventManagerApp.Controllers
                 eventInDb.Date = evnt.Date;
                 eventInDb.TicketPool = evnt.TicketPool;
             }
+
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Events");
@@ -80,7 +81,6 @@ namespace EventManagerApp.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Events");
-
         }
     }
 }

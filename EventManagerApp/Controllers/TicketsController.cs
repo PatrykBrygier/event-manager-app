@@ -1,4 +1,7 @@
 ﻿using EventManagerApp.Models;
+using EventManagerApp.Services;
+using EventManagerApp.ViewModels;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -7,10 +10,12 @@ namespace EventManagerApp.Controllers
 {
     public class TicketsController : Controller
     {
+        private ITicketService _ticketService;
         private ApplicationDbContext _context;
 
-        public TicketsController()
+        public TicketsController(ITicketService ticketService)
         {
+            _ticketService = ticketService;
             _context = new ApplicationDbContext();
         }
 
@@ -31,7 +36,7 @@ namespace EventManagerApp.Controllers
 
         public ActionResult Buy(int id)
         {
-            var evnt = _context.Events.SingleOrDefault(e => e.Id == id);
+            var evnt = _context.Events.FirstOrDefault(e => e.Id == id);
             var ticket = new Ticket
             {
                 Event = evnt,
@@ -44,25 +49,66 @@ namespace EventManagerApp.Controllers
         [HttpPost]
         public ActionResult Save(Ticket ticket)
         {
-            var eventInDb = _context.Events.SingleOrDefault(e => e.Id == ticket.Event.Id);
+            var evnt = _context.Events.FirstOrDefault(e => e.Id == ticket.Event.Id);
 
-            if (ticket.Customer.Id == 0)
+            if (evnt != null)
             {
-                _context.Customers.Add(ticket.Customer);
+                ticket.Event = evnt;
+
+                if (ticket.Customer.Id == 0)
+                {
+                    _context.Customers.Add(ticket.Customer);
+                }
+                else
+                {
+                    var customer = _context.Customers.SingleOrDefault(c => c.Id == ticket.Customer.Id);
+                    customer.Id = ticket.Customer.Id;
+                    customer.FirstName = ticket.Customer.FirstName;
+                    customer.LastName = ticket.Customer.LastName;
+                    customer.Email = ticket.Customer.Email;
+                }
+            }
+            else
+            {
+                throw new NullReferenceException("Event cannot be null");
+            }
+
+            ticket.Event.TicketPool--;
+            _context.Tickets.Add(ticket);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Tickets");
+        }
+
+        public ActionResult Return()
+        {
+            return View("Delete");
+        }
+
+        [HttpPost]
+        public ActionResult Delete(ReturnViewModel returnViewModel)
+        {
+            if (returnViewModel == null)
+                return HttpNotFound();
+
+            var ticket = _ticketService.GetTicketById(returnViewModel.Id);
+
+            if (ticket == null)
+                return HttpNotFound();
+
+            if (returnViewModel.FirstName == ticket.Customer.FirstName &&
+                returnViewModel.LastName == ticket.Customer.LastName &&
+                returnViewModel.Email == ticket.Customer.Email)
+            {
+                ticket.Event.TicketPool++;
+                _context.Customers.Remove(ticket.Customer);
+                _context.Tickets.Remove(ticket);
                 _context.SaveChanges();
             }
             else
             {
-                var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == ticket.Customer.Id);
-                customerInDb.Id = ticket.Customer.Id;
-                customerInDb.FirstName = ticket.Customer.FirstName;
-                customerInDb.LastName = ticket.Customer.LastName;
-                customerInDb.Email = ticket.Customer.Email;
+                return HttpNotFound();
             }
-
-            _context.Tickets.Add(ticket);
-            //eventInDb.TicketPool--;
-            _context.SaveChanges();
 
             return RedirectToAction("Index", "Tickets");
         }

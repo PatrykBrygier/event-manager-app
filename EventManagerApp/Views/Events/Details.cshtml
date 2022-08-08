@@ -7,6 +7,7 @@
 <p>When: @Model.Date</p>
 <p>Where: @Model.Place</p>
 <p>Tickets Left: @Model.TicketPool</p>
+<a href='@Url.Action("Return", "Tickets", new { id = Model.Id })' class="btn btn-primary">Return</a>
 <a href='@Url.Action("Buy", "Tickets", new { id = Model.Id })' class="btn btn-primary">Buy</a>
 <a href='@Url.Action("Edit", "Events", new { id = Model.Id })' class="btn btn-primary">Edit</a>
 <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
