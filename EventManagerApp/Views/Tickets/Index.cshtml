@@ -7,16 +7,16 @@
     <thead>
         <tr>
             <th>
-                Id
+                ID
             </th>
             <th>
-                Ticket owner
+                Ticket Owner
             </th>
             <th>
-                Event name
+                E-mail Adress
             </th>
             <th>
-                Tickets Left
+                Event Name
             </th>
         </tr>
     </thead>
@@ -31,10 +31,10 @@
                     @obj.Customer.FirstName @obj.Customer.LastName
                 </td>
                 <td>
-                    @obj.Event.Name
+                    @obj.Customer.Email
                 </td>
                 <td>
-                    @obj.Event.TicketPool
+                    @Html.ActionLink(obj.Event.Name, "Details", "Events", new { id = obj.Event.Id }, null)
                 </td>
             </tr>
         }
