@@ -1,5 +1,6 @@
-﻿using EventManagerApp.Models;
-using EventManagerApp.Services;
+﻿using EventManagerApp.Services;
+using EventManagerApp.ViewModels;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace EventManagerApp.Controllers
@@ -27,9 +28,20 @@ namespace EventManagerApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(Event evnt)
+        public ActionResult Save(AddEventViewModel addEventViewModel)
         {
-            _eventService.Save(evnt);
+            ModelState.Remove("Id");
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .Select(x => new { x.Key, x.Value.Errors })
+                    .ToArray();
+
+                return View("New");
+            }
+
+            _eventService.Save(addEventViewModel);
 
             return RedirectToAction("Index", "Events");
         }

@@ -34,7 +34,7 @@ namespace EventManagerApp.Controllers
         {
             _ticketService.SaveTicket(ticket);
 
-            return RedirectToAction("Index", "Tickets");
+            return RedirectToAction("Index", "Events");
         }
 
         public ActionResult Return()
@@ -45,24 +45,9 @@ namespace EventManagerApp.Controllers
         [HttpPost]
         public ActionResult Delete(ReturnViewModel returnViewModel)
         {
-            if (returnViewModel == null)
-                return HttpNotFound();
+            _ticketService.RemoveTicket(returnViewModel);
 
-            var ticket = _ticketService.GetTicketById(returnViewModel.Id);
-
-            if (ticket == null)
-                return HttpNotFound();
-
-            if (_ticketService.IsTicketValid(ticket, returnViewModel))
-            {
-                _ticketService.RemoveTicket(ticket);
-            }
-            else
-            {
-                return HttpNotFound();
-            }
-
-            return RedirectToAction("Index", "Tickets");
+            return RedirectToAction("Index", "Events");
         }
     }
 }

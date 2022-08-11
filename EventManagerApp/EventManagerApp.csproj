@@ -236,6 +236,8 @@
     <Compile Include="Services\ITicketService.cs" />
     <Compile Include="Services\TicketService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AddEventViewModel.cs" />
+    <Compile Include="ViewModels\BuyViewModel.cs" />
     <Compile Include="ViewModels\ReturnViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

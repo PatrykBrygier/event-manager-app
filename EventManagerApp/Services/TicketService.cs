@@ -70,29 +70,28 @@ namespace EventManagerApp.Services
             _context.SaveChanges();
         }
 
-        public Ticket GetTicketById(int id)
+        public void RemoveTicket(ReturnViewModel returnViewModel)
         {
             var ticket = _context.Tickets
                     .Include(t => t.Customer)
                     .Include(t => t.Event)
-                    .FirstOrDefault(t => t.Id == id);
+                    .FirstOrDefault(t => t.Id == returnViewModel.Id);
 
-            return ticket;
-        }
+            if (returnViewModel.FirstName == ticket.Customer.FirstName &&
+                returnViewModel.LastName == ticket.Customer.LastName &&
+                returnViewModel.Email == ticket.Customer.Email)
+            {
+                ticket.Event.TicketPool++;
+                _context.Customers.Remove(ticket.Customer);
+                _context.Tickets.Remove(ticket);
+            }
+            else
+            {
+                throw new Exception("There is no such event");
+            }
 
-        public bool IsTicketValid(Ticket ticket, ReturnViewModel returnViewModel)
-        {
-            return returnViewModel.FirstName == ticket.Customer.FirstName &&
-                   returnViewModel.LastName == ticket.Customer.LastName &&
-                   returnViewModel.Email == ticket.Customer.Email;
-        }
-
-        public void RemoveTicket(Ticket ticket)
-        {
-            ticket.Event.TicketPool++;
-            _context.Customers.Remove(ticket.Customer);
-            _context.Tickets.Remove(ticket);
             _context.SaveChanges();
         }
+
     }
 }

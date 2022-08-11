@@ -1,4 +1,4 @@
-﻿@model EventManagerApp.Models.Event
+﻿@model EventManagerApp.ViewModels.AddEventViewModel
 @{
     ViewBag.Title = "New";
 }
@@ -10,6 +10,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Name)
         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Place)
