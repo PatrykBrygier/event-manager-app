@@ -7,8 +7,8 @@ namespace EventManagerApp.Services
     public interface ITicketService
     {
         List<Ticket> TicketsToList(int id);
-        Ticket NewTicket(int id);
-        void SaveTicket(Ticket ticket);
+        BuyViewModel NewTicket(int id);
+        void SaveTicket(BuyViewModel buyViewModel);
         void RemoveTicket(ReturnViewModel returnViewModel);
     }
 }

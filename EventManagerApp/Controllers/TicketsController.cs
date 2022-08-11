@@ -1,5 +1,4 @@
-﻿using EventManagerApp.Models;
-using EventManagerApp.Services;
+﻿using EventManagerApp.Services;
 using EventManagerApp.ViewModels;
 using System.Web.Mvc;
 
@@ -30,9 +29,14 @@ namespace EventManagerApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(Ticket ticket)
+        public ActionResult Save(BuyViewModel buyViewModel)
         {
-            _ticketService.SaveTicket(ticket);
+            if (!ModelState.IsValid)
+            {
+                return View("Buy", buyViewModel);
+            }
+
+            _ticketService.SaveTicket(buyViewModel);
 
             return RedirectToAction("Index", "Events");
         }

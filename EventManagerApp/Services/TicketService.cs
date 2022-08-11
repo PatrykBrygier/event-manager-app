@@ -27,42 +27,45 @@ namespace EventManagerApp.Services
             return tickets;
         }
 
-        public Ticket NewTicket(int id)
+        public BuyViewModel NewTicket(int id)
         {
             var evnt = _context.Events.FirstOrDefault(e => e.Id == id);
+
+            var viewModel = new BuyViewModel
+            {
+                EventId = evnt.Id
+            };
+
+            return viewModel;
+        }
+
+        public void SaveTicket(BuyViewModel buyViewModel)
+        {
+            var evnt = _context.Events.FirstOrDefault(e => e.Id == buyViewModel.EventId);
+
             var ticket = new Ticket
             {
                 Event = evnt,
                 Customer = new Customer()
+                {
+                    Id = buyViewModel.CustomerId,
+                    FirstName = buyViewModel.FirstName,
+                    LastName = buyViewModel.LastName,
+                    Email = buyViewModel.Email,
+                }
             };
 
-            return ticket;
-        }
-
-        public void SaveTicket(Ticket ticket)
-        {
-            var evnt = _context.Events.FirstOrDefault(e => e.Id == ticket.Event.Id);
-
-            if (evnt != null)
+            if (buyViewModel.CustomerId == 0)
             {
-                ticket.Event = evnt;
-
-                if (ticket.Customer.Id == 0)
-                {
-                    _context.Customers.Add(ticket.Customer);
-                }
-                else
-                {
-                    var customer = _context.Customers.SingleOrDefault(c => c.Id == ticket.Customer.Id);
-                    customer.Id = ticket.Customer.Id;
-                    customer.FirstName = ticket.Customer.FirstName;
-                    customer.LastName = ticket.Customer.LastName;
-                    customer.Email = ticket.Customer.Email;
-                }
+                _context.Customers.Add(ticket.Customer);
             }
             else
             {
-                throw new NullReferenceException("Event cannot be null");
+                var customer = _context.Customers.FirstOrDefault(c => c.Id == buyViewModel.CustomerId);
+                customer.Id = buyViewModel.CustomerId;
+                customer.FirstName = buyViewModel.FirstName;
+                customer.LastName = buyViewModel.LastName;
+                customer.Email = buyViewModel.Email;
             }
 
             ticket.Event.TicketPool--;

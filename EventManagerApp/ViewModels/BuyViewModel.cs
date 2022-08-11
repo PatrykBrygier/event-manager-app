@@ -4,8 +4,10 @@ namespace EventManagerApp.ViewModels
 {
     public class BuyViewModel
     {
-        public int Id { get; set; }
+        public int EventId { get; set; }
+        public int CustomerId { get; set; }
 
+        [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
