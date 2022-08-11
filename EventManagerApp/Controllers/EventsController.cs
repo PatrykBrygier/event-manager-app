@@ -49,13 +49,21 @@ namespace EventManagerApp.Controllers
         public ActionResult Edit(int id)
         {
             var evnt = _eventService.GetEventById(id);
+            var viewModel = new AddEventViewModel
+            {
+                Id = evnt.Id,
+                Name = evnt.Name,
+                Place = evnt.Place,
+                Date = evnt.Date,
+                TicketPool = evnt.TicketPool
+            };
 
             if (evnt == null)
             {
                 return HttpNotFound();
             }
 
-            return View("New", evnt);
+            return View("New", viewModel);
         }
 
         public ActionResult Delete(int id)
