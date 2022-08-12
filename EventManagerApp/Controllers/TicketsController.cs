@@ -29,6 +29,7 @@ namespace EventManagerApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(BuyViewModel buyViewModel)
         {
             if (!ModelState.IsValid)
@@ -47,6 +48,7 @@ namespace EventManagerApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(ReturnViewModel returnViewModel)
         {
             _ticketService.RemoveTicket(returnViewModel);

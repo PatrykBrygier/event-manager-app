@@ -7,17 +7,17 @@ namespace EventManagerApp.ViewModels
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Name of the Event is required")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Location of the Event is required")]
         public string Place { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Number of tickets is required")]
         [Display(Name = "Ticket Pool")]
         public int TicketPool { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Event date is required")]
         public DateTime Date { get; set; }
     }
 }

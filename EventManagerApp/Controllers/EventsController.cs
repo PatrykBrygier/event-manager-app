@@ -28,6 +28,7 @@ namespace EventManagerApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(AddEventViewModel addEventViewModel)
         {
             ModelState.Remove("Id");

@@ -22,5 +22,11 @@
         @Html.LabelFor(m => m.Email)
         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
     </div>
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">Return</button>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
 }
