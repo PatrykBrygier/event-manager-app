@@ -10,5 +10,6 @@ namespace EventManagerApp.Services
         void Delete(int id);
         Event GetEventById(int id);
         List<Event> EventsToList();
+        AddEventViewModel NewViewModel(Event evnt);
     }
 }

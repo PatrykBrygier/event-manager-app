@@ -2,7 +2,11 @@
 @{
     ViewBag.Title = "Index";
 }
-<a href='@Url.Action("New", "Events")' class="btn btn-primary">Add Event</a>
+
+@if (User.IsInRole("Admin"))
+{
+    <a href='@Url.Action("New", "Events")' class="btn btn-primary">Add Event</a>
+}
 <table class="table table-bordered table-striped" style="width:100%">
     <thead>
         <tr>

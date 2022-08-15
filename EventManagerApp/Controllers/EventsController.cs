@@ -18,7 +18,6 @@ namespace EventManagerApp.Controllers
         public ActionResult Index()
         {
             var events = _eventService.EventsToList();
-
             return View(events);
         }
 
@@ -50,14 +49,7 @@ namespace EventManagerApp.Controllers
         public ActionResult Edit(int id)
         {
             var evnt = _eventService.GetEventById(id);
-            var viewModel = new AddEventViewModel
-            {
-                Id = evnt.Id,
-                Name = evnt.Name,
-                Place = evnt.Place,
-                Date = evnt.Date,
-                TicketPool = evnt.TicketPool
-            };
+            var viewModel = _eventService.NewViewModel(evnt);
 
             if (evnt == null)
             {

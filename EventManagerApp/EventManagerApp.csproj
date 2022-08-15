@@ -223,6 +223,10 @@
     <Compile Include="Migrations\202208020948111_AddingTicketAndCustomerModelToDatabase.designer.cs">
       <DependentUpon>202208020948111_AddingTicketAndCustomerModelToDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202208141716403_AddUserRoles.cs" />
+    <Compile Include="Migrations\202208141716403_AddUserRoles.designer.cs">
+      <DependentUpon>202208141716403_AddUserRoles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -304,6 +308,7 @@
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Tickets\Buy.cshtml" />
     <Content Include="Views\Tickets\Delete.cshtml" />
+    <Content Include="Views\Tickets\MyTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -334,6 +339,18 @@
     <EmbeddedResource Include="Migrations\202208020948111_AddingTicketAndCustomerModelToDatabase.resx">
       <DependentUpon>202208020948111_AddingTicketAndCustomerModelToDatabase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202208141716403_AddUserRoles.resx">
+      <DependentUpon>202208141716403_AddUserRoles.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EventManagerLibrary\EventManagerLibrary.csproj">
+      <Project>{38c9a2ff-8131-49cc-8a60-259a525d8da4}</Project>
+      <Name>EventManagerLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

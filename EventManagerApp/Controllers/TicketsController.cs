@@ -1,5 +1,6 @@
 ﻿using EventManagerApp.Services;
 using EventManagerApp.ViewModels;
+using Microsoft.AspNet.Identity;
 using System.Web.Mvc;
 
 namespace EventManagerApp.Controllers
@@ -17,15 +18,30 @@ namespace EventManagerApp.Controllers
         public ActionResult Index(int id)
         {
             var tickets = _ticketService.TicketsToList(id);
-
             return View(tickets);
         }
 
         public ActionResult Buy(int id)
         {
-            var ticket = _ticketService.NewTicket(id);
+            if (!User.Identity.IsAuthenticated)
+            {
+                var viewModel = _ticketService.NewBuyViewModel(id);
+                return View(viewModel);
+            }
+            else
+            {
+                var email = User.Identity.GetUserName();
+                _ticketService.SaveTicketLoggedUser(id, email);
+                return RedirectToAction("MyTickets", "Tickets");
+            }
+        }
 
-            return View(ticket);
+        [Authorize]
+        public ActionResult MyTickets()
+        {
+            var email = User.Identity.GetUserName();
+            var tickets = _ticketService.UserTicketsToList(email);
+            return View(tickets);
         }
 
         [HttpPost]
@@ -52,7 +68,6 @@ namespace EventManagerApp.Controllers
         public ActionResult Delete(ReturnViewModel returnViewModel)
         {
             _ticketService.RemoveTicket(returnViewModel);
-
             return RedirectToAction("Index", "Events");
         }
     }

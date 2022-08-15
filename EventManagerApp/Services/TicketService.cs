@@ -19,15 +19,28 @@ namespace EventManagerApp.Services
         public List<Ticket> TicketsToList(int id)
         {
             var tickets = _context.Tickets
-                .Where(t => t.Event.Id == id)
-                .Include(t => t.Customer)
-                .Include(t => t.Event)
-                .ToList();
+                          .Where(t => t.Event.Id == id)
+                          .Include(t => t.Customer)
+                          .Include(t => t.Event)
+                          .ToList();
 
             return tickets;
         }
 
-        public BuyViewModel NewTicket(int id)
+        public List<Ticket> UserTicketsToList(string email)
+        {
+            var customer = _context.Customers.FirstOrDefault(c => c.Email == email);
+
+            var tickets = _context.Tickets
+                          .Where(t => t.Customer.Id == customer.Id)
+                          .Include(t => t.Customer)
+                          .Include(t => t.Event)
+                          .ToList();
+
+            return tickets;
+        }
+
+        public BuyViewModel NewBuyViewModel(int id)
         {
             var evnt = _context.Events.FirstOrDefault(e => e.Id == id);
 
@@ -39,6 +52,22 @@ namespace EventManagerApp.Services
             return viewModel;
         }
 
+        public void SaveTicketLoggedUser(int id, string email)
+        {
+            var evnt = _context.Events.FirstOrDefault(e => e.Id == id);
+            var customer = _context.Customers.FirstOrDefault(c => c.Email == email);
+            var ticket = new Ticket
+            {
+                Event = evnt,
+                Customer = customer
+            };
+
+            evnt.TicketPool--;
+            _context.Tickets.Add(ticket);
+            _context.SaveChanges();
+
+        }
+
         public void SaveTicket(BuyViewModel buyViewModel)
         {
             var evnt = _context.Events.FirstOrDefault(e => e.Id == buyViewModel.EventId);
@@ -47,25 +76,22 @@ namespace EventManagerApp.Services
             {
                 Event = evnt,
                 Customer = new Customer()
-                {
-                    Id = buyViewModel.CustomerId,
-                    FirstName = buyViewModel.FirstName,
-                    LastName = buyViewModel.LastName,
-                    Email = buyViewModel.Email,
-                }
             };
 
-            if (buyViewModel.CustomerId == 0)
+            var customer = _context.Customers.FirstOrDefault(c => c.Email == buyViewModel.Email);
+
+            if (customer == null)
             {
+                ticket.Customer.Id = buyViewModel.CustomerId;
+                ticket.Customer.FirstName = buyViewModel.FirstName;
+                ticket.Customer.LastName = buyViewModel.LastName;
+                ticket.Customer.Email = buyViewModel.Email;
+
                 _context.Customers.Add(ticket.Customer);
             }
             else
             {
-                var customer = _context.Customers.FirstOrDefault(c => c.Id == buyViewModel.CustomerId);
-                customer.Id = buyViewModel.CustomerId;
-                customer.FirstName = buyViewModel.FirstName;
-                customer.LastName = buyViewModel.LastName;
-                customer.Email = buyViewModel.Email;
+                ticket.Customer = customer;
             }
 
             ticket.Event.TicketPool--;
@@ -95,6 +121,5 @@ namespace EventManagerApp.Services
 
             _context.SaveChanges();
         }
-
     }
 }

@@ -7,16 +7,22 @@
 <p>When: @Model.Date</p>
 <p>Where: @Model.Place</p>
 <p>Tickets Left: @Model.TicketPool</p>
-<a href='@Url.Action("Index", "Tickets", new { id = Model.Id })' class="btn btn-primary">Tickets</a>
-<a href='@Url.Action("Buy", "Tickets", new { id = Model.Id })' class="btn btn-primary">Buy</a>
-<a href='@Url.Action("Edit", "Events", new { id = Model.Id })' class="btn btn-primary">Edit</a>
-<button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+@if (User.IsInRole("Admin"))
+{
+    <a href='@Url.Action("Index", "Tickets", new { id = Model.Id })' class="btn btn-primary">Tickets</a>
+    <a href='@Url.Action("Edit", "Events", new { id = Model.Id })' class="btn btn-primary">Edit</a>
+    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete Event</button>
+}
+else
+{
+    <a href='@Url.Action("Buy", "Tickets", new { id = Model.Id })' class="btn btn-primary">Buy Ticket</a>
+}
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Delete "@Model.Name"</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -1,7 +1,7 @@
 ﻿using EventManagerApp.Models;
 using EventManagerApp.ViewModels;
-using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace EventManagerApp.Services
@@ -45,11 +45,13 @@ namespace EventManagerApp.Services
 
         public void Delete(int id)
         {
-            var evnt = _context.Events.SingleOrDefault(e => e.Id == id);
+            var evnt = GetEventById(id);
+            var tickets = _context.Tickets.Where(t => t.Event.Id == evnt.Id).Include(t => t.Customer);
 
-            if (evnt == null)
+            foreach (var ticket in tickets)
             {
-                throw new NullReferenceException("Event cannot be null");
+                //_context.Customers.Remove(ticket.Customer);
+                _context.Tickets.Remove(ticket);
             }
 
             _context.Events.Remove(evnt);
@@ -59,7 +61,6 @@ namespace EventManagerApp.Services
         public Event GetEventById(int id)
         {
             var evnt = _context.Events.SingleOrDefault(e => e.Id == id);
-
             return evnt;
         }
 
@@ -69,5 +70,18 @@ namespace EventManagerApp.Services
             return events;
         }
 
+        public AddEventViewModel NewViewModel(Event evnt)
+        {
+            var viewModel = new AddEventViewModel
+            {
+                Id = evnt.Id,
+                Name = evnt.Name,
+                Place = evnt.Place,
+                Date = evnt.Date,
+                TicketPool = evnt.TicketPool
+            };
+
+            return viewModel;
+        }
     }
 }
