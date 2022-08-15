@@ -1,11 +1,11 @@
-﻿using EventManagerApp.Models;
-using EventManagerApp.ViewModels;
+﻿using EventManagerLibrary.Models;
+using EventManagerLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
-namespace EventManagerApp.Services
+namespace EventManagerLibrary.Services
 {
     public class TicketService : ITicketService
     {

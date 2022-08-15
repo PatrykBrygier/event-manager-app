@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventManagerApp.Models
+namespace EventManagerLibrary.Models
 {
     public class Event
     {

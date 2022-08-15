@@ -1,5 +1,5 @@
-﻿using EventManagerApp.Services;
-using EventManagerApp.ViewModels;
+﻿using EventManagerLibrary.Services;
+using EventManagerLibrary.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.Web.Mvc;
 

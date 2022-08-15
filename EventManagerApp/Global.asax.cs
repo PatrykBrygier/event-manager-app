@@ -1,7 +1,7 @@
 using Autofac;
 using Autofac.Integration.Mvc;
-using EventManagerApp.Models;
-using EventManagerApp.Services;
+using EventManagerLibrary.Models;
+using EventManagerLibrary.Services;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;

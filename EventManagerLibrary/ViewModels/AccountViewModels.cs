@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace EventManagerApp.Models
+namespace EventManagerLibrary.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

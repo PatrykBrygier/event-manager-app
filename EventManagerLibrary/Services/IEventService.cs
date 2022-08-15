@@ -1,8 +1,8 @@
-﻿using EventManagerApp.Models;
-using EventManagerApp.ViewModels;
+﻿using EventManagerLibrary.Models;
+using EventManagerLibrary.ViewModels;
 using System.Collections.Generic;
 
-namespace EventManagerApp.Services
+namespace EventManagerLibrary.Services
 {
     public interface IEventService
     {

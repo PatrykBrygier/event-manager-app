@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EventManagerApp.ViewModels
+namespace EventManagerLibrary.ViewModels
 {
     public class ReturnViewModel
     {
