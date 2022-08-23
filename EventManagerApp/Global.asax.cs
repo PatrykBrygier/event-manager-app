@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using EventManagerLibrary.Models;
+using EventManagerLibrary.Repositories;
 using EventManagerLibrary.Services;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -22,6 +23,8 @@ namespace EventManagerApp
             builder.RegisterType<ApplicationDbContext>().AsSelf();
             builder.RegisterType<TicketService>().As<ITicketService>();
             builder.RegisterType<EventService>().As<IEventService>();
+            builder.RegisterType<EventRepository>().As<IEventRepository>();
+            builder.RegisterType<TicketRepository>().As<ITicketRepository>();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

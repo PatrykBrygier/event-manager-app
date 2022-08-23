@@ -1,5 +1,6 @@
-﻿using EventManagerLibrary.Services;
-using EventManagerLibrary.ViewModels;
+﻿using EventManagerApp.ViewModels;
+using EventManagerLibrary.Services;
+using EventManagerLibrary.Services.Models;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -17,8 +18,15 @@ namespace EventManagerApp.Controllers
         // GET: Events
         public ActionResult Index()
         {
-            var events = _eventService.EventsToList();
-            return View(events);
+            var events = _eventService.ReturnEventsList();
+            var viewModel = events.Select(e => new EventListViewModel(
+                e.Id,
+                e.Name,
+                e.Place,
+                e.TicketPool,
+                e.Date));
+
+            return View(viewModel);
         }
 
         public ActionResult New()
@@ -33,49 +41,53 @@ namespace EventManagerApp.Controllers
             ModelState.Remove("Id");
             if (!ModelState.IsValid)
             {
-                var errors = ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .Select(x => new { x.Key, x.Value.Errors })
-                    .ToArray();
-
                 return View("New");
             }
 
-            _eventService.Save(addEventViewModel);
+            var viewModel = new EventModel(
+                addEventViewModel.Id,
+                addEventViewModel.Name,
+                addEventViewModel.Place,
+                addEventViewModel.TicketPool,
+                addEventViewModel.Date);
+
+            _eventService.SaveEvent(viewModel);
 
             return RedirectToAction("Index", "Events");
         }
 
         public ActionResult Edit(int id)
         {
-            var evnt = _eventService.GetEventById(id);
-            var viewModel = _eventService.NewViewModel(evnt);
+            var evnt = _eventService.ReturnEventById(id);
+            var viewModel = new EditEventViewModel(
+                evnt.Id,
+                evnt.Name,
+                evnt.Place,
+                evnt.TicketPool,
+                evnt.Date);
 
-            if (evnt == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View("New", viewModel);
+            return View("Edit", viewModel);
         }
 
         public ActionResult Delete(int id)
         {
-            _eventService.Delete(id);
+            _eventService.DeleteEvent(id);
 
             return RedirectToAction("Index", "Events");
         }
 
         public ActionResult Details(int id)
         {
-            var evnt = _eventService.GetEventById(id);
+            var evnt = _eventService.ReturnEventById(id);
 
-            if (evnt == null)
-            {
-                return HttpNotFound();
-            }
+            var viewModel = new EventDetailsViewModel(
+                evnt.Id,
+                evnt.Name,
+                evnt.Place,
+                evnt.TicketPool,
+                evnt.Date);
 
-            return View(evnt);
+            return View(viewModel);
         }
     }
 }
